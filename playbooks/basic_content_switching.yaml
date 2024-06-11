@@ -2,8 +2,6 @@
   hosts: webinar_netscaler
   gather_facts: false
   tasks:
-
-    # add a SNIP
     - name: Webinar | add a SNIP
       delegate_to: localhost
       netscaler.adc.nsip:
@@ -13,12 +11,9 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         ipaddress: "{{ snip }}"
         netmask: 255.255.255.0
         type: SNIP
-
-    # enable LB CS features
     - name: Webinar | enable LB CS features
       delegate_to: localhost
       netscaler.adc.nsfeature:
@@ -31,8 +26,6 @@
         feature:
           - CS
           - LB
-
-    # Add a service named svc-red-server 
     - name: Webinar | Add a service named svc-red-server
       delegate_to: localhost
       netscaler.adc.service:
@@ -42,13 +35,10 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: svc-red-server
         ipaddress: "{{ server1_ip }}"
         servicetype: HTTP
         port: 80
-
-    # Add a service named svc-green-server 
     - name: Webinar | Add a service named svc-green-server
       delegate_to: localhost
       netscaler.adc.service:
@@ -58,13 +48,10 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: svc-green-server
         ipaddress: "{{ server2_ip }}"
         servicetype: HTTP
         port: 80
-
-    # Add an HTTP lb vserver named lb-red-server 
     - name: Webinar | Add an HTTP lb vserver named lb-red-server 
       delegate_to: localhost
       netscaler.adc.lbvserver:
@@ -74,18 +61,13 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: lb-red-server
         servicetype: HTTP
-
-        # bind the service svc-red-server to the lb vserver lb-red-server 
         lbvserver_service_binding:
           mode: desired # desired | bind | unbind
           binding_members:
             - name: lb-red-server
               servicename: svc-red-server
-
-    # Add an HTTP lb vserver named lb-green-server
     - name: Webinar | Add an HTTP lb vserver named lb-green-server
       delegate_to: localhost
       netscaler.adc.lbvserver:
@@ -95,18 +77,13 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: lb-green-server
         servicetype: HTTP
-
-        # bind the service svc-green-server to the lb vserver lb-green-server
         lbvserver_service_binding:
           mode: desired # desired | bind | unbind
           binding_members:
             - name: lb-green-server
               servicename: svc-green-server
-
-    # add a cs action csaction-red-server to target LB vserver lb-red-server
     - name: Webinar | add a cs action csaction-red-server to target LB vserver lb-red-server
       delegate_to: localhost
       netscaler.adc.csaction:
@@ -116,11 +93,8 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: csaction-red-server
         targetlbvserver: lb-red-server
-
-    # add a cs action csaction-green-server to target LB vserver lb-green-server
     - name: Webinar | add a cs action csaction-green-server to target LB vserver lb-green-server
       delegate_to: localhost
       netscaler.adc.csaction:
@@ -130,11 +104,8 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: csaction-green-server
         targetlbvserver: lb-green-server
-
-    # add a cs policy named cspolicy-red-server with a rule that checks is csaction-red-server should be performed
     - name: Webinar | add a cs policy named cspolicy-red-server with a rule that checks is csaction-red-server should be performed
       delegate_to: localhost
       netscaler.adc.cspolicy:
@@ -144,12 +115,9 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         policyname: cspolicy-red-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/red\")"
         action: csaction-red-server
-
-    # add a cs policy named cspolicy-green-server with a rule that checks is csaction-green-server should be performed
     - name: Webinar | add a cs policy named cspolicy-green-server with a rule that checks is csaction-green-server should be performed
       delegate_to: localhost
       netscaler.adc.cspolicy:
@@ -159,12 +127,9 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         policyname: cspolicy-green-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/green\")"
         action: csaction-green-server
-
-    # add an HTTP cs vserver named demo-csvserver and bind the above policies to it
     - name: Webinar | add an HTTP cs vserver named demo-csvserver and bind the above policies to it
       delegate_to: localhost
       netscaler.adc.csvserver:
@@ -174,13 +139,10 @@
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
-
         name: demo-csvserver
         servicetype: HTTP
         ipv46: "{{ vip_ip }}"
         port: 80
-
-        # bind cs vserver demo-csvserver -policyName cspolicy-green-server -priority 110
         csvserver_cspolicy_binding:
           mode: desired # desired | bind | unbind
           binding_members:
