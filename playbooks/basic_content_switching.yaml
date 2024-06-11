@@ -1,8 +1,8 @@
-- name: Webinar | Basic Content Switching Configuration
-  hosts: webinar_netscaler
+- name: Basic Content Switching Configuration
+  hosts: azure_netscaler
   gather_facts: false
   tasks:
-    - name: Webinar | add a SNIP
+    - name: Add a SNIP
       delegate_to: localhost
       netscaler.adc.nsip:
         nsip: "{{ nsip }}"
@@ -14,7 +14,7 @@
         ipaddress: "{{ snip }}"
         netmask: 255.255.255.0
         type: SNIP
-    - name: Webinar | enable LB CS features
+    - name: Enable LB CS features
       delegate_to: localhost
       netscaler.adc.nsfeature:
         nsip: "{{ nsip }}"
@@ -26,7 +26,7 @@
         feature:
           - CS
           - LB
-    - name: Webinar | Add a service named svc-red-server
+    - name: Add a service named svc-red-server
       delegate_to: localhost
       netscaler.adc.service:
         nsip: "{{ nsip }}"
@@ -39,7 +39,7 @@
         ipaddress: "{{ server1_ip }}"
         servicetype: HTTP
         port: 80
-    - name: Webinar | Add a service named svc-green-server
+    - name: Add a service named svc-green-server
       delegate_to: localhost
       netscaler.adc.service:
         nsip: "{{ nsip }}"
@@ -52,7 +52,7 @@
         ipaddress: "{{ server2_ip }}"
         servicetype: HTTP
         port: 80
-    - name: Webinar | Add an HTTP lb vserver named lb-red-server 
+    - name: Add an HTTP lb vserver named lb-red-server 
       delegate_to: localhost
       netscaler.adc.lbvserver:
         nsip: "{{ nsip }}"
@@ -68,7 +68,7 @@
           binding_members:
             - name: lb-red-server
               servicename: svc-red-server
-    - name: Webinar | Add an HTTP lb vserver named lb-green-server
+    - name: Add an HTTP lb vserver named lb-green-server
       delegate_to: localhost
       netscaler.adc.lbvserver:
         nsip: "{{ nsip }}"
@@ -84,7 +84,7 @@
           binding_members:
             - name: lb-green-server
               servicename: svc-green-server
-    - name: Webinar | add a cs action csaction-red-server to target LB vserver lb-red-server
+    - name: Add a cs action csaction-red-server to target LB vserver lb-red-server
       delegate_to: localhost
       netscaler.adc.csaction:
         nsip: "{{ nsip }}"
@@ -95,7 +95,7 @@
         state: present
         name: csaction-red-server
         targetlbvserver: lb-red-server
-    - name: Webinar | add a cs action csaction-green-server to target LB vserver lb-green-server
+    - name: Add a cs action csaction-green-server to target LB vserver lb-green-server
       delegate_to: localhost
       netscaler.adc.csaction:
         nsip: "{{ nsip }}"
@@ -106,7 +106,7 @@
         state: present
         name: csaction-green-server
         targetlbvserver: lb-green-server
-    - name: Webinar | add a cs policy named cspolicy-red-server with a rule that checks is csaction-red-server should be performed
+    - name: Add a cs policy named cspolicy-red-server with a rule that checks is csaction-red-server should be performed
       delegate_to: localhost
       netscaler.adc.cspolicy:
         nsip: "{{ nsip }}"
@@ -118,7 +118,7 @@
         policyname: cspolicy-red-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/red\")"
         action: csaction-red-server
-    - name: Webinar | add a cs policy named cspolicy-green-server with a rule that checks is csaction-green-server should be performed
+    - name: Add a cs policy named cspolicy-green-server with a rule that checks is csaction-green-server should be performed
       delegate_to: localhost
       netscaler.adc.cspolicy:
         nsip: "{{ nsip }}"
@@ -130,7 +130,7 @@
         policyname: cspolicy-green-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/green\")"
         action: csaction-green-server
-    - name: Webinar | add an HTTP cs vserver named demo-csvserver and bind the above policies to it
+    - name: Add an HTTP cs vserver named demo-csvserver and bind the above policies to it
       delegate_to: localhost
       netscaler.adc.csvserver:
         nsip: "{{ nsip }}"
