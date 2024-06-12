@@ -7,7 +7,7 @@
       netscaler.adc.nsfeature:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: enabled
@@ -19,12 +19,12 @@
       netscaler.adc.service:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
         name: svc-red-server
-        ipaddress: "{{ red_ip }}"
+        ipaddress: "{{ server1_ip }}"
         servicetype: HTTP
         port: 80
     - name: Add a service named svc-green-server
@@ -32,7 +32,7 @@
       netscaler.adc.service:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -45,7 +45,7 @@
       netscaler.adc.lbvserver:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -61,7 +61,7 @@
       netscaler.adc.lbvserver:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -77,7 +77,7 @@
       netscaler.adc.csaction:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -88,7 +88,7 @@
       netscaler.adc.csaction:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -99,7 +99,7 @@
       netscaler.adc.cspolicy:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -111,7 +111,7 @@
       netscaler.adc.cspolicy:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
@@ -123,7 +123,7 @@
       netscaler.adc.csvserver:
         nsip: "{{ nsip }}"
         nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
+        nitro_pass: "{{ nitro_pass }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
         state: present
