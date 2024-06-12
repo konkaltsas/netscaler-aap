@@ -2,18 +2,6 @@
   hosts: azure_netscaler
   gather_facts: false
   tasks:
-    - name: Add a SNIP
-      delegate_to: localhost
-      netscaler.adc.nsip:
-        nsip: "{{ nsip }}"
-        nitro_user: "{{ nitro_user }}"
-        nitro_pass: "{{ new_password }}"
-        nitro_protocol: "{{ nitro_protocol }}"
-        validate_certs: "{{ validate_certs }}"
-        state: present
-        ipaddress: "{{ snip }}"
-        netmask: 255.255.255.0
-        type: SNIP
     - name: Enable LB CS features
       delegate_to: localhost
       netscaler.adc.nsfeature:
