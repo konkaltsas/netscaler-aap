@@ -22,7 +22,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: svc-red-server
         ipaddress: "{{ server1_ip }}"
         servicetype: HTTP
@@ -35,7 +35,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: svc-green-server
         ipaddress: "{{ server2_ip }}"
         servicetype: HTTP
@@ -48,7 +48,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: lb-red-server
         servicetype: HTTP
         lbvserver_service_binding:
@@ -64,7 +64,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: lb-green-server
         servicetype: HTTP
         lbvserver_service_binding:
@@ -80,7 +80,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: csaction-red-server
         targetlbvserver: lb-red-server
     - name: Add a cs action csaction-green-server to target LB vserver lb-green-server
@@ -91,7 +91,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: csaction-green-server
         targetlbvserver: lb-green-server
     - name: Add a cs policy named cspolicy-red-server with a rule that checks is csaction-red-server should be performed
@@ -102,7 +102,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         policyname: cspolicy-red-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/red\")"
         action: csaction-red-server
@@ -114,7 +114,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         policyname: cspolicy-green-server
         rule: "HTTP.REQ.URL.SET_TEXT_MODE(IGNORECASE).STARTSWITH(\"/green\")"
         action: csaction-green-server
@@ -126,7 +126,7 @@
         nitro_pass: "{{ new_password }}"
         nitro_protocol: "{{ nitro_protocol }}"
         validate_certs: "{{ validate_certs }}"
-        state: absent
+        state: present
         name: demo-csvserver
         servicetype: HTTP
         ipv46: "{{ vip_ip }}"
