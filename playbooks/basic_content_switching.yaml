@@ -1,5 +1,5 @@
 - name: Basic Content Switching Configuration
-  hosts: azure_netscaler
+  hosts: all
   gather_facts: false
   tasks:
     - name: Enable LB CS features
