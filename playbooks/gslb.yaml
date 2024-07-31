@@ -1,0 +1,137 @@
+- name: Global Server Load Balancing
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Enable GSLB features
+      delegate_to: localhost
+      netscaler.adc.nsfeature:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: enabled
+        feature:
+          - GSLB
+    # add gslb site GSLB_site1 
+    - name: Add This GSLB Site 
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        sitename: "{{ this_gslbsite_name }}"
+        siteipaddress: "{{ this_gslbsite_private_ip }}"
+        publicip: "{{ this_gslbsite_publicip }}"
+    - name: Add Remote GSLB Site 
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        sitename: "{{ remote_gslbsite_name }}"
+        siteipaddress: "{{ remote_gslbsite_private_ip }}"
+        publicip: "{{ remote_gslbsite_publicip }}"
+    # add gslb vserver gslb_vs 
+    - name: Αdd gslb vserver gslb_vs 
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        name: "{{ this_gslbvserver_name }}"
+        servicetype: "{{ this_gslbvserver_servicetype }}"
+        backuplbmethod: "{{ this_gslbvserver_backuplbmethod }}"
+    # add gslb service GSLB_site1_gsvc1 
+    - name: Add gslb service GSLB_site1_gsvc1 
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        servicename: "{{ this_gslbsite_gslbservice_name }}"
+        ip: "{{ this_gslbsite_gslbservice_private_ip }}"
+        servicetype: "{{ this_gslbsite_gslbservice_type }}"
+        port: "{{ this_gslbsite_gslbservice_port }}"
+        publicip: "{{ this_gslbsite_gslbservice_public_ip }}"
+        publicport: "{{ this_gslbsite_gslbservice_port }}"
+        sitename: "{{ this_gslbsite_name }}"
+    # add gslb service GSLB_site2_gsvc1 
+    - name: Add gslb service GSLB_site2_gsvc1 
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        servicename: "{{ remote_gslbsite_gslbservice_name }}"
+        ip: "{{ remote_gslbsite_gslbservice_private_ip }}"
+        servicetype: "{{ remote_gslbsite_gslbservice_type }}"
+        port: "{{ remote_gslbsite_gslbservice_port }}"
+        publicip: "{{ remote_gslbsite_gslbservice_public_ip }}"
+        publicport: "{{ remote_gslbsite_gslbservice_port }}"
+        sitename: "{{ remote_gslbsite_name }}"
+    # bind gslb vserver gslb_vs -serviceName GSLB_site2_gsvc1
+    - name: Bind gslb vserver gslb_vs -serviceName GSLB_site2_gsvc1
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        name: "{{ citrixadc_gslbvserver_name }}"
+        ip: "{{ remote_gslbsite_name }}"
+    # bind gslb vserver gslb_vs -serviceName GSLB_site2_gsvc1
+    - name: Bind gslb vserver gslb_vs -serviceName GSLB_site2_gsvc1
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        name: "{{ citrixadc_gslbvserver_name }}"
+        ip: "{{ this_gslbsite_name }}"
+    # bind gslb vserver gslb_vs -domainName cabdemo.cntestwebsite.com -TTL 5
+    - name: Bind gslb vserver gslb_vs -serviceName GSLB_site2_gsvc1
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        name: "{{ citrixadc_gslbvserver_name }}"
+        domainname: "{{ domainname }}"
+    # add ns ip 
+    - name: GSLB SNIP
+      delegate_to: localhost
+      netscaler.adc.service:
+        nsip: "{{ nsip }}"
+        nitro_user: "{{ nitro_user }}"
+        nitro_pass: "{{ nitro_pass }}"
+        nitro_protocol: "{{ nitro_protocol }}"
+        validate_certs: "{{ validate_certs }}"
+        state: present
+        ipaddress: "{{ this_gslbsite_private_ip }}"
+        netmask: "{{ this_gslbsite_private_ip_netmask }}"
+        mgmtaccess: "ENABLED"
+        networkroute: "ENABLED"
